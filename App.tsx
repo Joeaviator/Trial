@@ -1,40 +1,63 @@
-import React, { useState, useEffect } from 'react';
-import { UserState, TopicStructure, EcoShift } from './types.ts';
-import { authService } from './authService.ts';
-import Header from './components/Header.tsx';
-import Navigation from './components/Navigation.tsx';
-import MindModule from './components/modules/MindModule.tsx';
-import SkillsModule from './components/modules/SkillsModule.tsx';
-import EcoModule from './components/modules/EcoModule.tsx';
-import AuthPage from './components/AuthPage.tsx';
+import React, { useState, useEffect, useCallback } from 'react';
+import { UserState, TopicStructure, EcoShift } from './types';
+import { authService } from './authService';
+import Header from './components/Header';
+import Navigation from './components/Navigation';
+import MindModule from './components/modules/MindModule';
+import SkillsModule from './components/modules/SkillsModule';
+import EcoModule from './components/modules/EcoModule';
+import DatabaseModule from './components/modules/DatabaseModule';
+import AuthPage from './components/AuthPage';
+
+const DEFAULT_STATE: UserState = { 
+  impactScore: 1, 
+  moodHistory: [], 
+  exploredTopics: [],
+  quizHistory: [],
+  ecoHistory: [],
+  lastActionTimestamp: Date.now(),
+  dailyActionCount: 0
+};
 
 const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<string | null>(authService.getCurrentUser());
-  const [userState, setUserState] = useState<UserState>({ 
-    impactScore: 1, 
-    moodHistory: [], 
-    exploredTopics: [],
-    quizHistory: [],
-    ecoHistory: [],
-    lastActionTimestamp: Date.now(),
-    dailyActionCount: 0
-  });
-  const [activeTab, setActiveTab] = useState<'mind' | 'skills' | 'eco'>('eco');
+  const [userState, setUserState] = useState<UserState>(DEFAULT_STATE);
+  const [activeTab, setActiveTab] = useState<'mind' | 'skills' | 'eco' | 'db'>('eco');
+  const [isInitialized, setIsInitialized] = useState(false);
 
-  useEffect(() => {
-    if (currentUser) {
-      const users = authService.getUsers();
-      if (users[currentUser]) {
-        setUserState(users[currentUser].state);
-      }
+  // Load user data strictly for the current tab's session
+  const loadUserData = useCallback((email: string) => {
+    const users = authService.getUsers();
+    const userRecord = users[email];
+    if (userRecord) {
+      setUserState(userRecord.state);
+      setIsInitialized(true);
+    } else {
+      handleLogout();
     }
-  }, [currentUser]);
+  }, []);
 
   useEffect(() => {
     if (currentUser) {
+      loadUserData(currentUser);
+    } else {
+      setIsInitialized(false);
+    }
+  }, [currentUser, loadUserData]);
+
+  // Sync state to the global local vault
+  useEffect(() => {
+    if (currentUser && isInitialized) {
       authService.saveUserState(currentUser, userState);
     }
-  }, [userState, currentUser]);
+  }, [userState, currentUser, isInitialized]);
+
+  const handleLogout = () => {
+    authService.setCurrentUser(null);
+    setCurrentUser(null);
+    setUserState(DEFAULT_STATE);
+    setIsInitialized(false);
+  };
 
   const incrementEfficiency = (percentGain: number) => {
     setUserState(prev => {
@@ -68,8 +91,13 @@ const App: React.FC = () => {
     incrementEfficiency(3);
   };
 
+  const handleAuthSuccess = (email: string) => {
+    authService.setCurrentUser(email);
+    setCurrentUser(email);
+  };
+
   if (!currentUser) {
-    return <AuthPage onAuthSuccess={(e) => setCurrentUser(e)} />;
+    return <AuthPage onAuthSuccess={handleAuthSuccess} />;
   }
 
   return (
@@ -77,10 +105,8 @@ const App: React.FC = () => {
       <div className="max-w-5xl mx-auto px-4 pt-10">
         <Header 
           score={userState.impactScore} 
-          onLogout={() => { 
-            authService.setCurrentUser(null); 
-            setCurrentUser(null); 
-          }} 
+          userId={currentUser}
+          onLogout={handleLogout} 
         />
         
         <main className="mt-12">
@@ -109,6 +135,9 @@ const App: React.FC = () => {
               onTopicExplored={handleTopicExplored}
             />
           )}
+          {activeTab === 'db' && (
+            <DatabaseModule userId={currentUser} />
+          )}
         </main>
 
         <Navigation 
@@ -117,7 +146,7 @@ const App: React.FC = () => {
         />
 
         <footer className="mt-24 text-center text-[10px] text-zinc-400 font-bold uppercase tracking-widest mono">
-          AllEase Sigma Protocol | Status: Operational
+          AllEase Sigma Protocol | Tab Session: {currentUser} | Multi-Thread Enabled
         </footer>
       </div>
     </div>

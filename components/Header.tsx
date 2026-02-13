@@ -1,12 +1,12 @@
-
 import React from 'react';
 
 interface HeaderProps {
   score: number;
+  userId: string;
   onLogout: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ score, onLogout }) => {
+const Header: React.FC<HeaderProps> = ({ score, userId, onLogout }) => {
   const roundedScore = Math.round(score);
 
   return (
@@ -16,10 +16,13 @@ const Header: React.FC<HeaderProps> = ({ score, onLogout }) => {
           <h1 className="text-6xl font-black tracking-tighter hero-text mb-2">
             All<span className="text-[#0D9488]">Ease</span>
           </h1>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4">
             <div className="flex items-center gap-2 bg-teal-50 px-4 py-1.5 rounded-full border border-teal-100 shadow-sm">
               <span className="h-2 w-2 rounded-full bg-[#0D9488] animate-pulse"></span>
               <p className="text-[10px] font-black text-teal-700 uppercase tracking-[0.2em] mono">Operational</p>
+            </div>
+            <div className="text-[10px] font-bold text-slate-400 mono truncate max-w-[200px]">
+              ID: {userId}
             </div>
           </div>
         </div>

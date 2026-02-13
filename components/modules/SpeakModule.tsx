@@ -1,5 +1,5 @@
 import React from 'react';
-import { speakPhrase } from '../../geminiService.ts';
+import { speakPhrase } from '../../geminiService';
 
 const SpeakModule: React.FC = () => {
   const commonPhrases = [

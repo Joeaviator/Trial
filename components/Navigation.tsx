@@ -1,9 +1,8 @@
-
 import React from 'react';
 
 interface NavigationProps {
-  activeTab: 'mind' | 'skills' | 'eco';
-  setActiveTab: (tab: 'mind' | 'skills' | 'eco') => void;
+  activeTab: 'mind' | 'skills' | 'eco' | 'db';
+  setActiveTab: (tab: 'mind' | 'skills' | 'eco' | 'db') => void;
 }
 
 const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab }) => {
@@ -11,6 +10,7 @@ const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab }) => {
     { id: 'eco', label: 'Optimize', icon: '📊' },
     { id: 'skills', label: 'Archive', icon: '📑' },
     { id: 'mind', label: 'Focus', icon: '🧘' },
+    { id: 'db', label: 'Core', icon: '🗄️' },
   ] as const;
 
   return (

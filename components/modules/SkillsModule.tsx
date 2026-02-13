@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { TopicStructure } from '../../types.ts';
-import { getTopicStructure, getSubtopicExplanation } from '../../geminiService.ts';
+import { TopicStructure } from '../../types';
+import { getTopicStructure, getSubtopicExplanation } from '../../geminiService';
 
 interface SkillsModuleProps {
   onTopicExplored: (topic: TopicStructure) => void;
