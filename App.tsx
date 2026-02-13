@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { UserState, TopicStructure, EcoShift } from './types.ts';
-import { authService } from './authService.ts';
-import Header from './components/Header.tsx';
-import Navigation from './components/Navigation.tsx';
-import MindModule from './components/modules/MindModule.tsx';
-import SkillsModule from './components/modules/SkillsModule.tsx';
-import EcoModule from './components/modules/EcoModule.tsx';
-import AuthPage from './components/AuthPage.tsx';
+import { UserState, TopicStructure, EcoShift } from './types';
+import { authService } from './authService';
+import Header from './components/Header';
+import Navigation from './components/Navigation';
+import MindModule from './components/modules/MindModule';
+import SkillsModule from './components/modules/SkillsModule';
+import EcoModule from './components/modules/EcoModule';
+import AuthPage from './components/AuthPage';
 
 const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<string | null>(authService.getCurrentUser());
@@ -68,7 +68,9 @@ const App: React.FC = () => {
     incrementEfficiency(3);
   };
 
-  if (!currentUser) return <AuthPage onAuthSuccess={(e) => setCurrentUser(e)} />;
+  if (!currentUser) {
+    return <AuthPage onAuthSuccess={(e) => setCurrentUser(e)} />;
+  }
 
   return (
     <div className="min-h-screen pb-40 bg-[#F8FAFC] text-[#1E293B] selection:bg-[#00C2B2] selection:text-white">
@@ -115,7 +117,7 @@ const App: React.FC = () => {
         />
 
         <footer className="mt-24 text-center text-[10px] text-zinc-400 font-bold uppercase tracking-widest mono">
-          AllEase Sigma Protocol | Light Mode Active
+          AllEase Sigma Protocol | Operational Status: Active
         </footer>
       </div>
     </div>
