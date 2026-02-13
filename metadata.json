@@ -1,0 +1,7 @@
+{
+  "name": "AllEase",
+  "description": "High-performance personal optimization and lifestyle management dashboard.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
