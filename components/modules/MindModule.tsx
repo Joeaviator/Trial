@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { MoodLog } from '../../types';
-import { getSupportiveContent } from '../../geminiService';
+import { MoodLog } from '../../types.ts';
+import { getSupportiveContent } from '../../geminiService.ts';
 
 interface MindModuleProps {
   moodHistory: MoodLog[];
@@ -84,7 +84,7 @@ const MindModule: React.FC<MindModuleProps> = ({ moodHistory, onMoodLog, onBreat
 
   return (
     <div className="space-y-24 fade-entry max-w-6xl mx-auto pb-32">
-      {/* Pacer Hero: Filled with visual rhythm */}
+      {/* Pacer Hero */}
       <section className="bg-white p-16 md:p-24 text-center rounded-[5rem] border border-slate-100 shadow-2xl relative overflow-hidden">
         <div className="absolute top-0 right-0 p-16 opacity-[0.03] pointer-events-none">
           <svg className="w-80 h-80" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
@@ -134,7 +134,7 @@ const MindModule: React.FC<MindModuleProps> = ({ moodHistory, onMoodLog, onBreat
         )}
       </section>
 
-      {/* Mood Grid: 24+ emojis, more visual interest */}
+      {/* Mood Grid */}
       <section className="bg-white p-16 md:p-24 rounded-[5rem] border border-slate-100 shadow-xl relative overflow-hidden">
         <div className="absolute top-0 left-0 p-16 opacity-[0.02] pointer-events-none rotate-12">
           <svg className="w-96 h-96" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
@@ -171,13 +171,9 @@ const MindModule: React.FC<MindModuleProps> = ({ moodHistory, onMoodLog, onBreat
           ))}
         </div>
 
-        {/* AI Support Feedback: Large and soothing */}
+        {/* AI Support Feedback */}
         {(loadingSupport || supportContent) && (
           <div className="mt-28 p-12 md:p-20 bg-slate-50 border border-slate-200 rounded-[5rem] animate-in slide-in-from-bottom-16 duration-700 shadow-inner relative overflow-hidden">
-            <div className="absolute bottom-0 right-0 p-12 opacity-[0.03] pointer-events-none">
-              <svg className="w-64 h-64" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-            </div>
-
             {loadingSupport ? (
               <div className="flex flex-col items-center py-32 space-y-12">
                 <div className="relative w-20 h-20">
@@ -194,38 +190,20 @@ const MindModule: React.FC<MindModuleProps> = ({ moodHistory, onMoodLog, onBreat
                 </div>
                 <div className="grid lg:grid-cols-[1fr_500px] gap-24 items-center">
                   <div className="space-y-12">
-                    <div className="relative">
-                      <p className="text-4xl text-slate-900 font-black italic border-l-[16px] border-teal-100 pl-16 py-10 leading-[1.3] tracking-tighter">
-                        "{supportContent?.text}"
-                      </p>
-                      <div className="absolute -top-6 -left-4 text-6xl text-teal-50 opacity-20 pointer-events-none font-serif">“</div>
-                    </div>
-                    <div className="flex items-center gap-6 bg-white/50 w-fit px-8 py-4 rounded-[2rem] border border-slate-100 shadow-sm">
-                      <svg className="w-8 h-8 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                      <span className="text-[11px] font-black uppercase tracking-[0.3em] mono text-slate-400">Biological Validation Sequence Optimized</span>
-                    </div>
+                    <p className="text-4xl text-slate-900 font-black italic border-l-[16px] border-teal-100 pl-16 py-10 leading-[1.3] tracking-tighter">
+                      "{supportContent?.text}"
+                    </p>
                   </div>
                   {supportContent?.visual && (
                     <div className="group relative aspect-[3/4] lg:aspect-square w-full rounded-[4.5rem] overflow-hidden border border-slate-200 shadow-5xl">
                       <img src={supportContent.visual} className="w-full h-full object-cover transition-transform duration-[4s] group-hover:scale-110" alt="Serene Real-world Cityscape" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-16 flex flex-col justify-end">
-                        <span className="text-white text-3xl font-black uppercase tracking-tighter mb-4">Calm Metropolitan Hub</span>
-                        <div className="flex items-center gap-3">
-                          <span className="w-2 h-2 bg-teal-400 rounded-full"></span>
-                          <span className="text-[10px] text-teal-400 font-black uppercase tracking-[0.5em] mono">SIM_VECTOR_CALM</span>
-                        </div>
-                      </div>
                     </div>
                   )}
                 </div>
                 <div className="flex justify-between items-center pt-12 border-t border-slate-200">
-                  <div className="flex flex-col gap-2">
-                    <span className="text-[11px] font-black text-slate-300 uppercase tracking-[0.5em] mono">SUPPORT_UNIT_DB // {Math.random().toString(16).slice(2, 10).toUpperCase()}</span>
-                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest italic">Your mental state is archived securely to track your optimization curve.</p>
-                  </div>
                   <button 
                     onClick={() => setSupportContent(null)}
-                    className="text-[12px] font-black text-slate-500 hover:text-white uppercase tracking-[0.4em] px-16 py-8 bg-white border border-slate-100 hover:bg-slate-900 rounded-[3rem] transition-all shadow-md hover:shadow-2xl active:scale-95"
+                    className="text-[12px] font-black text-slate-500 hover:text-white uppercase tracking-[0.4em] px-16 py-8 bg-white border border-slate-100 hover:bg-slate-900 rounded-[3rem] transition-all shadow-md active:scale-95"
                   >
                     Clear Feed
                   </button>
@@ -236,25 +214,20 @@ const MindModule: React.FC<MindModuleProps> = ({ moodHistory, onMoodLog, onBreat
         )}
       </section>
 
-      {/* History Archive: Visualized with status badges */}
+      {/* History Archive */}
       {moodHistory.length > 0 && (
         <section className="bg-white p-20 rounded-[5rem] border border-slate-100 shadow-xl relative overflow-hidden">
-          <div className="flex items-center justify-between mb-20 px-6">
-            <h3 className="text-[13px] font-black uppercase tracking-[0.6em] text-slate-400">Neural Log Timeline</h3>
-            <div className="h-[1px] flex-1 bg-slate-100 ml-16"></div>
-          </div>
+          <h3 className="text-[13px] font-black uppercase tracking-[0.6em] text-slate-400 mb-8 px-6">Neural Log Timeline</h3>
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-8">
             {moodHistory.slice(0, 16).map((log) => (
               <div 
                 key={log.id} 
-                className="group bg-slate-50 border border-slate-100 p-10 rounded-[3.5rem] flex flex-col items-center gap-6 hover:border-teal-300 hover:bg-white transition-all duration-700 shadow-sm hover:shadow-3xl"
+                className="group bg-slate-50 border border-slate-100 p-10 rounded-[3.5rem] flex flex-col items-center gap-6 hover:border-teal-300 hover:bg-white transition-all shadow-sm"
               >
                 <span className="text-5xl group-hover:scale-125 transition-transform">{log.mood}</span>
-                <div className="text-center">
-                  <p className="text-[10px] text-slate-900 font-black mono bg-slate-200 group-hover:bg-teal-50 px-4 py-1.5 rounded-full transition-colors">
-                    {new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                  </p>
-                </div>
+                <p className="text-[10px] text-slate-900 font-black mono bg-slate-200 group-hover:bg-teal-50 px-4 py-1.5 rounded-full">
+                  {new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </p>
               </div>
             ))}
           </div>
