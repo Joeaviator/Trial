@@ -1,6 +1,5 @@
-
 import { GoogleGenAI, Type, Modality } from "@google/genai";
-import { TopicStructure, ActivityStep, ActivityGuide, QuizQuestion } from "./types";
+import { TopicStructure, ActivityStep, ActivityGuide, QuizQuestion } from "./types.ts";
 
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 

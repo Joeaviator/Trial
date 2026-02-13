@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { authService } from '../authService';
+import { authService } from '../authService.ts';
 
 interface AuthPageProps {
   onAuthSuccess: (email: string) => void;

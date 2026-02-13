@@ -1,5 +1,4 @@
-
-import { UserState } from './types';
+import { UserState } from './types.ts';
 
 const DB_KEY = 'ecohabit_db_users';
 const SESSION_KEY = 'ecohabit_current_user';

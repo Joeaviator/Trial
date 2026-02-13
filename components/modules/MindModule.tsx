@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
-import { MoodLog } from '../../types';
-import { getSupportiveContent } from '../../geminiService';
+import { MoodLog } from '../../types.ts';
+import { getSupportiveContent } from '../../geminiService.ts';
 
 interface MindModuleProps {
   moodHistory: MoodLog[];

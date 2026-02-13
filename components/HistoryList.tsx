@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { EcoShift } from '../types';
+import { EcoShift } from '../types.ts';
 
 interface HistoryListProps {
   history: EcoShift[];

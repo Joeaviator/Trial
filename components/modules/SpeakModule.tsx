@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { speakPhrase } from '../../geminiService';
+import { speakPhrase } from '../../geminiService.ts';
 
 const SpeakModule: React.FC = () => {
   const commonPhrases = [
@@ -37,7 +36,7 @@ const SpeakModule: React.FC = () => {
       </section>
 
       <section className="bg-white p-10 rounded-[2.5rem] border border-slate-200 shadow-sm">
-        <h3 className="text-[10px] font-black uppercase text-slate-400 mb-6 text-center tracking-widest">Custom Command Injection</h3>
+        <h3 className="text-[10px] font-black uppercase text-zinc-400 mb-6 text-center tracking-widest">Custom Command Injection</h3>
         <div className="flex flex-col sm:flex-row gap-4">
            <input 
             type="text" 

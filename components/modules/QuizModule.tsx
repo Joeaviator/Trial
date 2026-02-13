@@ -1,7 +1,6 @@
-
 import React, { useState } from 'react';
-import { TopicStructure, QuizQuestion, QuizResult } from '../../types';
-import { generateQuiz } from '../../geminiService';
+import { TopicStructure, QuizQuestion, QuizResult } from '../../types.ts';
+import { generateQuiz } from '../../geminiService.ts';
 
 interface QuizModuleProps {
   exploredTopics: TopicStructure[];
