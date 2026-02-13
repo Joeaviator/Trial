@@ -1,6 +1,5 @@
-
 import { GoogleGenAI, Type, Modality } from "@google/genai";
-import { TopicStructure, ActivityStep, ActivityGuide, QuizQuestion } from "./types";
+import { TopicStructure, ActivityStep, ActivityGuide, QuizQuestion } from "./types.ts";
 
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
@@ -23,7 +22,6 @@ Constraints:
 Output strictly in JSON.
 `;
 
-// Fix: Fully implement the supportive content generator with image generation
 export async function getSupportiveContent(mood: string): Promise<{ text: string; visual: string }> {
   const response = await ai.models.generateContent({
     model: 'gemini-3-flash-preview',
@@ -60,7 +58,6 @@ export async function getSupportiveContent(mood: string): Promise<{ text: string
   return { text: data.supportiveText || "Calming protocol initiated.", visual };
 }
 
-// Fix: Corrected the truncated getActivityGuide function
 export async function getActivityGuide(activity: string): Promise<ActivityGuide> {
   const response = await ai.models.generateContent({
     model: 'gemini-3-flash-preview',
@@ -105,12 +102,11 @@ export async function getActivityGuide(activity: string): Promise<ActivityGuide>
 
   const guide: ActivityGuide = JSON.parse(response.text || '{"overview":"","steps":[]}');
 
-  // Generate visuals for each protocol step for a complete experience
   const updatedSteps = await Promise.all(guide.steps.map(async (step) => {
     try {
       const imageGen = await ai.models.generateContent({
         model: 'gemini-2.5-flash-image',
-        contents: { parts: [{ text: `High-quality technical illustration for ${activeActivity} optimization, professional, clean workspace: ${step.imagePrompt}` }] },
+        contents: { parts: [{ text: `High-quality technical illustration for ${activity} optimization, professional, clean workspace: ${step.imagePrompt}` }] },
         config: { imageConfig: { aspectRatio: "4:3" } }
       });
       const part = imageGen.candidates?.[0]?.content?.parts?.find(p => p.inlineData);
@@ -126,7 +122,6 @@ export async function getActivityGuide(activity: string): Promise<ActivityGuide>
   return { ...guide, steps: updatedSteps };
 }
 
-// Fix: Added missing getTopicStructure function
 export async function getTopicStructure(query: string): Promise<TopicStructure> {
   const response = await ai.models.generateContent({
     model: 'gemini-3-flash-preview',
@@ -158,7 +153,6 @@ export async function getTopicStructure(query: string): Promise<TopicStructure> 
   return JSON.parse(response.text || '{}');
 }
 
-// Fix: Added missing getSubtopicExplanation function
 export async function getSubtopicExplanation(topic: string, subtopic: string): Promise<string> {
   const response = await ai.models.generateContent({
     model: 'gemini-3-flash-preview',
@@ -170,7 +164,6 @@ export async function getSubtopicExplanation(topic: string, subtopic: string): P
   return response.text || "Detailed data stream unavailable.";
 }
 
-// Fix: Added missing generateQuiz function
 export async function generateQuiz(topic: TopicStructure): Promise<QuizQuestion[]> {
   const response = await ai.models.generateContent({
     model: 'gemini-3-flash-preview',
@@ -196,7 +189,6 @@ export async function generateQuiz(topic: TopicStructure): Promise<QuizQuestion[
   return JSON.parse(response.text || '[]');
 }
 
-// Fix: Added missing speakPhrase function using TTS model
 export async function speakPhrase(text: string): Promise<void> {
   try {
     const response = await ai.models.generateContent({
@@ -231,7 +223,6 @@ export async function speakPhrase(text: string): Promise<void> {
   }
 }
 
-// Helper: Implement required base64 decoding
 function decode(base64: string) {
   const binaryString = atob(base64);
   const len = binaryString.length;
@@ -242,7 +233,6 @@ function decode(base64: string) {
   return bytes;
 }
 
-// Helper: Implement required raw PCM audio decoding
 async function decodeAudioData(
   data: Uint8Array,
   ctx: AudioContext,
