@@ -1,7 +1,13 @@
 import { GoogleGenAI, Type, Modality } from "@google/genai";
-import { TopicStructure, ActivityStep, ActivityGuide, QuizQuestion } from "./types";
+import { TopicStructure, ActivityStep, ActivityGuide, QuizQuestion } from "./types.ts";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+const getApiKey = () => {
+  const key = process.env.API_KEY;
+  if (!key) console.warn("Gemini API Key missing from environment.");
+  return key || "";
+};
+
+const ai = new GoogleGenAI({ apiKey: getApiKey() });
 
 const SHARED_SILENT_SAFETY_PROMPT = `
 STRICT CONTENT ARCHITECTURE: 
