@@ -1,25 +1,47 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface HeaderProps {
   score: number;
   userId: string;
   onLogout: () => void;
+  onCoreUnlock: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ score, userId, onLogout }) => {
-  const roundedScore = Math.round(score);
+const Header: React.FC<HeaderProps> = ({ score, userId, onLogout, onCoreUnlock }) => {
+  const [clicks, setClicks] = useState(0);
+  const displayScore = score.toFixed(2);
+
+  useEffect(() => {
+    if (clicks === 0) return;
+    const timer = setTimeout(() => setClicks(0), 2000);
+    return () => clearTimeout(timer);
+  }, [clicks]);
+
+  const handleStatusClick = () => {
+    const next = clicks + 1;
+    setClicks(next);
+    if (next >= 5) {
+      onCoreUnlock();
+      setClicks(0);
+    }
+  };
 
   return (
     <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-12 pb-16 pt-6">
       <div className="flex flex-col gap-6">
         <div>
-          <h1 className="text-6xl font-black tracking-tighter hero-text mb-2">
+          <h1 className="text-6xl font-black tracking-tighter hero-text mb-2 select-none">
             All<span className="text-[#0D9488]">Ease</span>
           </h1>
           <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-            <div className="flex items-center gap-2 bg-teal-50 px-4 py-1.5 rounded-full border border-teal-100 shadow-sm">
-              <span className="h-2 w-2 rounded-full bg-[#0D9488] animate-pulse"></span>
-              <p className="text-[10px] font-black text-teal-700 uppercase tracking-[0.2em] mono">Operational</p>
+            <div 
+              onClick={handleStatusClick}
+              className="flex items-center gap-2 bg-teal-50 px-4 py-1.5 rounded-full border border-teal-100 shadow-sm cursor-pointer hover:bg-teal-100 transition-colors select-none"
+            >
+              <span className={`h-2 w-2 rounded-full bg-[#0D9488] ${clicks > 0 ? 'animate-bounce' : 'animate-pulse'}`}></span>
+              <p className="text-[10px] font-black text-teal-700 uppercase tracking-[0.2em] mono">
+                {clicks > 0 ? `BRIDGE_SYNC_${clicks}/5` : 'Operational'}
+              </p>
             </div>
             <div className="text-[10px] font-bold text-slate-400 mono truncate max-w-[200px]">
               ID: {userId}
@@ -43,14 +65,14 @@ const Header: React.FC<HeaderProps> = ({ score, userId, onLogout }) => {
         <div className="flex justify-between items-end mb-8">
           <div>
             <span className="text-[11px] font-black text-slate-400 uppercase tracking-[0.4em] block mb-3">Efficiency Quotient</span>
-            <span className="text-7xl font-black tracking-tighter text-[#0D9488] leading-none">
-              {roundedScore}<span className="text-3xl text-slate-300 font-bold ml-1">%</span>
+            <span className="text-6xl font-black tracking-tighter text-[#0D9488] leading-none transition-all duration-1000">
+              {displayScore}<span className="text-2xl text-slate-300 font-bold ml-1">%</span>
             </span>
           </div>
           <div className="text-right">
             <span className="text-[11px] font-black text-slate-400 uppercase tracking-[0.4em] block mb-3">Tier Assignment</span>
-            <span className="text-[12px] font-black uppercase tracking-widest text-white bg-slate-900 px-6 py-2.5 rounded-2xl shadow-xl">
-              {roundedScore < 20 ? "INITIATE" : roundedScore < 50 ? "QUALIFIED" : roundedScore < 85 ? "OPTIMIZED" : "ELITE_CLASS"}
+            <span className={`text-[12px] font-black uppercase tracking-widest text-white px-6 py-2.5 rounded-2xl shadow-xl transition-all duration-700 ${score >= 85 ? 'bg-teal-600 animate-pulse' : 'bg-slate-900'}`}>
+              {score < 20 ? "INITIATE" : score < 50 ? "QUALIFIED" : score < 85 ? "OPTIMIZED" : "ELITE_CLASS"}
             </span>
           </div>
         </div>
@@ -58,7 +80,7 @@ const Header: React.FC<HeaderProps> = ({ score, userId, onLogout }) => {
         <div className="h-4 w-full bg-slate-100/50 rounded-full overflow-hidden p-1 border border-slate-200/50 shadow-inner">
           <div 
             className="h-full bg-gradient-to-r from-teal-600 via-teal-500 to-lime-500 rounded-full transition-all duration-1000 ease-out shadow-lg"
-            style={{ width: `${roundedScore}%` }}
+            style={{ width: `${score}%` }}
           />
         </div>
       </div>

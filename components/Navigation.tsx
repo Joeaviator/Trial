@@ -3,15 +3,18 @@ import React from 'react';
 interface NavigationProps {
   activeTab: 'mind' | 'skills' | 'eco' | 'db';
   setActiveTab: (tab: 'mind' | 'skills' | 'eco' | 'db') => void;
+  showCore: boolean;
 }
 
-const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab }) => {
-  const tabs = [
-    { id: 'eco', label: 'Optimize', icon: '📊' },
-    { id: 'skills', label: 'Archive', icon: '📑' },
-    { id: 'mind', label: 'Focus', icon: '🧘' },
-    { id: 'db', label: 'Core', icon: '🗄️' },
+const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab, showCore }) => {
+  const allTabs = [
+    { id: 'eco', label: 'Optimize', icon: '📊', visible: true },
+    { id: 'skills', label: 'Archive', icon: '📑', visible: true },
+    { id: 'mind', label: 'Focus', icon: '🧘', visible: true },
+    { id: 'db', label: 'Core', icon: '🗄️', visible: showCore },
   ] as const;
+
+  const tabs = allTabs.filter(t => t.visible);
 
   return (
     <nav className="fixed bottom-8 left-1/2 -translate-x-1/2 w-fit bg-white/90 backdrop-blur-md rounded-[2.5rem] p-2 shadow-2xl flex gap-1.5 z-50 border border-slate-200">

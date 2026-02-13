@@ -4,23 +4,33 @@ import { getTopicStructure, getSubtopicExplanation } from '../../geminiService';
 
 interface SkillsModuleProps {
   onTopicExplored: (topic: TopicStructure) => void;
+  onInteraction: () => void;
 }
 
-const SkillsModule: React.FC<SkillsModuleProps> = ({ onTopicExplored }) => {
+const SkillsModule: React.FC<SkillsModuleProps> = ({ onTopicExplored, onInteraction }) => {
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
   const [explaining, setExplaining] = useState<string | null>(null);
   const [topicData, setTopicData] = useState<TopicStructure | null>(null);
   const [explanation, setExplanation] = useState<string | null>(null);
+  const [isEliteMode, setIsEliteMode] = useState(false);
 
   const handleSearch = async (e?: React.FormEvent) => {
     e?.preventDefault();
     if (!query.trim()) return;
+
+    if (query.toLowerCase().trim() === '/elite') {
+      setIsEliteMode(true);
+      setQuery('');
+      onInteraction();
+      return;
+    }
     
     setLoading(true);
     setTopicData(null);
     setExplanation(null);
     setExplaining(null);
+    onInteraction(); //EQ Boost for active use
     
     try {
       const data = await getTopicStructure(query);
@@ -37,6 +47,7 @@ const SkillsModule: React.FC<SkillsModuleProps> = ({ onTopicExplored }) => {
     if (!topicData) return;
     setExplaining(subtopicTitle);
     setExplanation(null);
+    onInteraction(); //EQ Boost for curiosity
     try {
       const detail = await getSubtopicExplanation(topicData.topic, subtopicTitle);
       setExplanation(detail);
@@ -51,7 +62,12 @@ const SkillsModule: React.FC<SkillsModuleProps> = ({ onTopicExplored }) => {
 
   return (
     <div className="space-y-20 fade-entry max-w-5xl mx-auto pb-24">
-      {/* Engine Control Section */}
+      {isEliteMode && (
+        <div className="bg-slate-900 border border-teal-500/30 p-4 rounded-2xl flex items-center justify-center gap-4 animate-pulse">
+           <span className="text-teal-400 mono text-[10px] font-black uppercase tracking-[0.4em]">[SYSTEM_ENHANCEMENT]: ELITE_PROTOCOL_ENGAGED</span>
+        </div>
+      )}
+
       <section className="bg-white rounded-[4rem] p-16 md:p-24 shadow-sm border border-slate-100 relative overflow-hidden">
         <div className="absolute top-0 right-0 p-12 opacity-[0.03] pointer-events-none">
           <svg className="w-64 h-64" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
@@ -93,7 +109,6 @@ const SkillsModule: React.FC<SkillsModuleProps> = ({ onTopicExplored }) => {
         </div>
       </section>
 
-      {/* Structured Knowledge View */}
       {topicData && (
         <div className="space-y-16 animate-in zoom-in duration-700">
           <section className="bg-white rounded-[5rem] p-16 md:p-28 shadow-4xl border border-slate-100">
@@ -136,7 +151,6 @@ const SkillsModule: React.FC<SkillsModuleProps> = ({ onTopicExplored }) => {
             </div>
           </section>
 
-          {/* Detailed Context Injection (Deep Dive) */}
           {(explaining || explanation) && (
             <section className="bg-white rounded-[5rem] p-20 md:p-32 border-4 border-slate-50 shadow-5xl relative overflow-hidden animate-in slide-in-from-right duration-700">
               <div className="absolute top-0 right-0 p-24 opacity-[0.02] pointer-events-none">
