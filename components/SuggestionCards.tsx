@@ -1,5 +1,5 @@
 import React from 'react';
-import { EcoShift } from '../types.ts';
+import { EcoShift } from '../types';
 
 interface SuggestionCardsProps {
   shift: EcoShift;

@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import { EcoShift, ActivityGuide } from '../../types.ts';
-import { getActivityGuide } from '../../geminiService.ts';
-import InputArea from '../InputArea.tsx';
-import HistoryList from '../HistoryList.tsx';
+import { EcoShift, ActivityGuide } from '../../types';
+import { getActivityGuide } from '../../geminiService';
+import InputArea from '../InputArea';
+import HistoryList from '../HistoryList';
 
 interface EcoModuleProps {
   history: EcoShift[];
