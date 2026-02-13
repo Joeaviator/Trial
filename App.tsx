@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { UserState, TopicStructure, EcoShift } from './types.ts';
-import { authService } from './authService.ts';
-import Header from './components/Header.tsx';
-import Navigation from './components/Navigation.tsx';
-import MindModule from './components/modules/MindModule.tsx';
-import SkillsModule from './components/modules/SkillsModule.tsx';
-import EcoModule from './components/modules/EcoModule.tsx';
-import AuthPage from './components/AuthPage.tsx';
+import { UserState, TopicStructure, EcoShift } from './types';
+import { authService } from './authService';
+import Header from './components/Header';
+import Navigation from './components/Navigation';
+import MindModule from './components/modules/MindModule';
+import SkillsModule from './components/modules/SkillsModule';
+import EcoModule from './components/modules/EcoModule';
+import AuthPage from './components/AuthPage';
 
 const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<string | null>(authService.getCurrentUser());
@@ -73,7 +73,13 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen pb-40 bg-[#F8FAFC] text-[#1E293B] selection:bg-[#00C2B2] selection:text-white">
       <div className="max-w-5xl mx-auto px-4 pt-10">
-        <Header score={userState.impactScore} onLogout={() => { authService.setCurrentUser(null); setCurrentUser(null); }} />
+        <Header 
+          score={userState.impactScore} 
+          onLogout={() => { 
+            authService.setCurrentUser(null); 
+            setCurrentUser(null); 
+          }} 
+        />
         
         <main className="mt-12">
           {activeTab === 'eco' && (
@@ -87,7 +93,10 @@ const App: React.FC = () => {
               moodHistory={userState.moodHistory} 
               onMoodLog={(mood) => {
                 const log = { id: Date.now().toString(), mood, timestamp: Date.now() };
-                setUserState(prev => ({ ...prev, moodHistory: [log, ...prev.moodHistory].slice(0, 50) }));
+                setUserState(prev => ({ 
+                  ...prev, 
+                  moodHistory: [log, ...prev.moodHistory].slice(0, 50) 
+                }));
                 incrementEfficiency(1);
               }}
               onBreathComplete={() => incrementEfficiency(2)}
@@ -100,7 +109,10 @@ const App: React.FC = () => {
           )}
         </main>
 
-        <Navigation activeTab={activeTab} setActiveTab={(tab: any) => setActiveTab(tab)} />
+        <Navigation 
+          activeTab={activeTab} 
+          setActiveTab={(tab) => setActiveTab(tab)} 
+        />
 
         <footer className="mt-24 text-center text-[10px] text-zinc-400 font-bold uppercase tracking-widest mono">
           AllEase Sigma Protocol | Light Mode Active
