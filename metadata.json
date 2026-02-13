@@ -1,6 +1,6 @@
 {
-  "name": "AllEase",
-  "description": "High-performance personal optimization and lifestyle management dashboard.",
+  "name": "AllEase ",
+  "description": "High-performance lifestyle optimization dashboard.",
   "requestFramePermissions": [
     "geolocation"
   ]
